@@ -14,7 +14,8 @@ import com.android.volley.toolbox.Volley;
  * This is a helper class for any server related functionality for the application
  */
 public class APICaller {
-    public static String URL = "192.168.1.18:3000/meter";
+    //Server URL -- May be implement this such that it is not static (allow application user to change the URL
+    public static String URL = "http://192.168.1.12:3000/meter";
     /**
      * This method sends a request to the server and passes the response to the callback
      * function. If successful
@@ -32,8 +33,13 @@ public class APICaller {
             URL = URL +"/3";
         }
 
+        //Applying singleton pattern as suggested by the documentation as the application makes
+        // constant use of the network and will be more efficient to setup a single requestqueue instance
+        // for the lifetime of the application
+        RequestQueueSingleton requestQueueSingleton = RequestQueueSingleton.getInstance(context);
+        RequestQueue queue = requestQueueSingleton.getRequestQueue();
+
         //Call to server for ppm value
-        RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest req = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
