@@ -16,7 +16,7 @@ public class MeterView extends View {
     private int x;
     private int y;
     private int mCircleRadius;
-    private int ppm;
+    private String ppm = "";
 
     public MeterView(Context context) {
         super(context);
@@ -47,6 +47,16 @@ public class MeterView extends View {
         mPaint.setStrokeWidth(10);
 
         mPaint.setColor(Color.GREEN);
+
+    }
+
+    @Override
+    public void onDraw(Canvas canvas){
+        x = getWidth()/2;
+        y = getHeight()/2;
+        mCircleRadius = x/2;
+
+        //Updates the circle color based on the PPM levels
 //        assert set != null;
 //        ppm = set.getAttributeIntValue(0,-1);
 //        if(ppm>2000){
@@ -58,18 +68,11 @@ public class MeterView extends View {
 //        }else{
 //            changeColor(Color.BLACK);
 //        }
-    }
-
-    @Override
-    public void onDraw(Canvas canvas){
-        x = getWidth()/2;
-        y = getHeight()/2;
-        mCircleRadius = x/2;
         canvas.drawCircle(x,y,mCircleRadius,mPaint);
         changeColor(Color.BLACK);
         enableStroke(false);
         //Change string out with variable
-        canvas.drawText("200PPM",x,(float)(y+y*0.04),mPaint);
+        canvas.drawText(ppm,x,(float)(y+y*0.04),mPaint);
     }
     public void enableStroke(boolean val){
         if(!val) mPaint.setStyle(Paint.Style.FILL);
@@ -78,7 +81,7 @@ public class MeterView extends View {
     public void changeColor(int rgbVal){
         mPaint.setColor(rgbVal);
     }
-    public void updateMeter(int ppm){
+    public void updateMeter(String ppm){
         this.ppm = ppm;
         invalidate();
     }

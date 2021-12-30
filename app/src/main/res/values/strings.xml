@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">CO2Monitor</string>
-    <string name="update">Update information</string>
+    <string name="update">Update</string>
     <string name="update_information">Information is automatically updated every 30 seconds</string>
 </resources>
