@@ -4,18 +4,21 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * This is a helper class for any server related functionality for the application
  */
 public class APICaller {
     //Server URL -- May be implement this such that it is not static (allow application user to change the URL
-    public static String URL = "http://192.168.1.12:3000/meter";
+    public static final String url = new String("http://192.168.1.3:3000/api/reading");
     /**
      * This method sends a request to the server and passes the response to the callback
      * function. If successful
@@ -23,35 +26,35 @@ public class APICaller {
      * @param context
      */
     public static void getPPMReading(PPMCallback callback, Context context, SensorOptions sensor){
-
+        String sensorURL = null;
         // Set URL correctly to the sensor value
         if(sensor == SensorOptions.sensor1){
-            URL = URL +"/1";
+            sensorURL = url + "/1";
         }else if(sensor == SensorOptions.sensor2){
-            URL = URL +"/2";
+            sensorURL = url +"/2";
         }else if(sensor == SensorOptions.sensor3){
-            URL = URL +"/3";
+            sensorURL = url +"/3";
         }
 
         //Applying singleton pattern as suggested by the documentation as the application makes
         // constant use of the network and will be more efficient to setup a single requestqueue instance
         // for the lifetime of the application
         RequestQueueSingleton requestQueueSingleton = RequestQueueSingleton.getInstance(context);
-        RequestQueue queue = requestQueueSingleton.getRequestQueue();
 
         //Call to server for ppm value
-        StringRequest req = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET,sensorURL,null, new Response.Listener<JSONObject>(){
             @Override
-            public void onResponse(String response) {
-                Log.d("response", response);
+            public void onResponse(JSONObject response) {
+                Log.d("Output", response.toString());
                 callback.onSuccess(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.d("Output", error.toString());
                 callback.onFailure();
             }
         });
-        queue.add(req);
+        requestQueueSingleton.addToRequestQueue(req);
     }
 }

@@ -4,6 +4,7 @@ package com.projects.co2monitor;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,9 +13,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    public static String MY_TAG = "OUTPUT";
     private MeterView meterView;
     private Button updateBtn;
     private TextView timeText;
@@ -41,14 +49,17 @@ public class MainActivity extends AppCompatActivity {
                 //Calls the server to get the information
                 APICaller.getPPMReading(new PPMCallback() {
                     @Override
-                    public void onSuccess(String response) {
+                    public void onSuccess(JSONObject response) {
                         // Parses the PPM value from the response
-                        String ppm = response;
-                        String time = response;
+                        List<String> list = new LinkedList<String>();
+                        list.add("value");
+                        list.add("time");
+                        HashMap<String,String> items= JSONParser.getItemsToString(list,response);
+                        String ppm = items.get("value");
+                        String time = items.get("time");
                         meterView.updateMeter(ppm);
                         timeText.setText(time);
                     }
-
                     @Override
                     public void onFailure(){
                         Toast.makeText(MainActivity.this, "Failed to retrieve information", Toast.LENGTH_SHORT).show();
@@ -59,12 +70,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         // Setting up sensor selection spinner
         ArrayList<String> list = new ArrayList<>();
         for(SensorOptions i: SensorOptions.values()){
             list.add(i.name());
         }
-
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,list);
         sensor_spinner.setAdapter(adapter);
 
@@ -77,14 +88,17 @@ public class MainActivity extends AppCompatActivity {
                 //If user selects a different sensor, updates the meter with that new sensor data
                 APICaller.getPPMReading(new PPMCallback() {
                     @Override
-                    public void onSuccess(String response) {
+                    public void onSuccess(JSONObject response) {
                         //Parse response for ppm and time
-                        String ppm = response;
-                        String time = response;
+                        List<String> list = new LinkedList<String>();
+                        list.add("value");
+                        list.add("time");
+                        HashMap<String,String> items= JSONParser.getItemsToString(list,response);
+                        String ppm = items.get("value");
+                        String time = items.get("time");
                         meterView.updateMeter(ppm);
                         timeText.setText(time);
                     }
-
                     @Override
                     public void onFailure() {
                         Toast.makeText(MainActivity.this,"Failed to retrieve information", Toast.LENGTH_SHORT).show();
