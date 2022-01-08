@@ -45,9 +45,7 @@ public class MeterView extends View {
         mPaint.setTextSize(70);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(10);
-
         mPaint.setColor(Color.GREEN);
-
     }
 
     @Override
@@ -55,24 +53,28 @@ public class MeterView extends View {
         x = getWidth()/2;
         y = getHeight()/2;
         mCircleRadius = x/2;
+        init(null);
 
         //Updates the circle color based on the PPM levels
-//        assert set != null;
-//        ppm = set.getAttributeIntValue(0,-1);
-//        if(ppm>2000){
-//            changeColor(Color.RED);
-//        }else if(ppm>1000){
-//            changeColor(Color.rgb(255,153,51));
-//        }else if(ppm>250){
-//            changeColor(Color.rgb(0,204,0));
-//        }else{
-//            changeColor(Color.BLACK);
-//        }
+        if(!ppm.isEmpty()) {
+            int intPPM = Integer.parseInt(ppm);
+            if (intPPM > 2000) {
+                changeColor(Color.RED);
+            } else if (intPPM > 1000) {
+                changeColor(Color.rgb(255, 153, 51));
+            } else if (intPPM > 250) {
+                changeColor(Color.rgb(0, 204, 0));
+            } else {
+                changeColor(Color.BLACK);
+            }
+        }
         canvas.drawCircle(x,y,mCircleRadius,mPaint);
+
+        //Changing color back to black for text
         changeColor(Color.BLACK);
         enableStroke(false);
         //Change string out with variable
-        canvas.drawText(ppm,x,(float)(y+y*0.04),mPaint);
+        canvas.drawText(ppm,x,(float)(y+y*0.045),mPaint);
     }
     public void enableStroke(boolean val){
         if(!val) mPaint.setStyle(Paint.Style.FILL);
