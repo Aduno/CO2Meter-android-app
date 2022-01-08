@@ -4,4 +4,4 @@ Android application displays the CO2 concentrations of various sensors, displays
 
 Works in conjuction with the CO2 server based on MongoDB, Express, and NodeJS which will be posted on github once completed. The application makes API calls to the server for information regarding the different sensors and updates the screen value according to the JSON object responses.
 
-**In progress**
+**Work in progress**
