@@ -54,9 +54,15 @@ public class MeterView extends View {
         y = getHeight()/2;
         mCircleRadius = x/2;
         init(null);
+        //Color back to black for text
+        changeColor(Color.BLACK);
+        enableStroke(false);
+        //Change string out with variable
+        canvas.drawText(ppm, x, (float) (y + y * 0.045), mPaint);
+        enableStroke(true);
 
         //Updates the circle color based on the PPM levels
-        if(!ppm.isEmpty()) {
+        if(!ppm.isEmpty()&&!ppm.equals("NA")) {// Need this check so it doesn't crash
             int intPPM = Integer.parseInt(ppm);
             if (intPPM > 2000) {
                 changeColor(Color.RED);
@@ -69,12 +75,6 @@ public class MeterView extends View {
             }
         }
         canvas.drawCircle(x,y,mCircleRadius,mPaint);
-
-        //Changing color back to black for text
-        changeColor(Color.BLACK);
-        enableStroke(false);
-        //Change string out with variable
-        canvas.drawText(ppm,x,(float)(y+y*0.045),mPaint);
     }
     public void enableStroke(boolean val){
         if(!val) mPaint.setStyle(Paint.Style.FILL);
@@ -85,6 +85,10 @@ public class MeterView extends View {
     }
     public void updateMeter(String ppm){
         this.ppm = ppm;
+        invalidate();
+    }
+    public void displayFailure(){
+        this.ppm = "NA";
         invalidate();
     }
 }

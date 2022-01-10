@@ -25,7 +25,7 @@ public class APICaller {
      * @param callback
      * @param context
      */
-    public static void getPPMReading(PPMCallback callback, Context context, SensorOptions sensor){
+    public static void getSinglePPMReading(PPMCallback callback, Context context, SensorOptions sensor){
         String sensorURL = null;
         // Set URL correctly to the sensor value
         if(sensor == SensorOptions.sensor1){
