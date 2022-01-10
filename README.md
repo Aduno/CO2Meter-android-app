@@ -6,6 +6,6 @@ Works in conjuction with the CO2 server based on MongoDB, Express, and NodeJS wh
 
 ![Screenshot](/images/sensor1.png)
 ![Screenshot](/images/sensor2.png)
-![Screenshot](/images/sensor3.png)__
+![Screenshot](/images/sensor3.png)<br />
 
 **Work in progress**
