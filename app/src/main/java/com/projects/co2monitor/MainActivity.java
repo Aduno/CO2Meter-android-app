@@ -4,7 +4,6 @@ package com.projects.co2monitor;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,7 +12,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -47,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Calls the server to get the information
-                APICaller.getPPMReading(new PPMCallback() {
+                APICaller.getSinglePPMReading(new PPMCallback() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         // Parses the PPM value from the response
@@ -86,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 // Updates the sensor variable to match the user's selection
                 sensor = SensorOptions.getSensor(i+1);
                 //If user selects a different sensor, updates the meter with that new sensor data
-                APICaller.getPPMReading(new PPMCallback() {
+                APICaller.getSinglePPMReading(new PPMCallback() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         //Parse response for ppm and time
@@ -101,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure() {
+                        meterView.displayFailure();
+                        timeText.setText("");
                         Toast.makeText(MainActivity.this,"Failed to retrieve information", Toast.LENGTH_SHORT).show();
                     }
                 },
